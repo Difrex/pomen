@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 use strict;
-no warnings; # Disable experimental ewarnings
+no warnings;    # Disable experimental ewarnings
 
 use POMEN::Cache;
 use Term::ANSIColor;
@@ -24,23 +24,27 @@ if ( $ARGV[0] =~ '^/.+' ) {
 
     my @entries = split /\//, $ARGV[0];
     if ( @entries == 2 ) {
-        print colored( "/",         'red' )
-            . colored( $entries[1], "yellow" )
-            . colored( "/\n",         'red' );
+        print colored( "/", 'red' ) . colored( $entries[1] . "\n", "yellow" );
         for my $entry ( sort keys $root->{'/'}->{ $entries[1] } ) {
-            print colored("\t$entry", 'green') . colored( "/\n",         'red' ) ;
+            print colored( "\t/",    'red' )
+                . colored( "$entry", 'green' )
+                . colored( "/\n",    'red' );
         }
     }
-    elsif (@entries > 2) {
+    elsif ( @entries > 2 ) {
         print colored( "/",         'red' )
             . colored( $entries[1], "yellow" )
-            . colored( "/\n",         'red' );
-        print colored("\t".$entries[2], 'green') . colored( "/\n",         'red' );
+            . colored( "/\n",       'red' );
+        print colored( "\t" . $entries[2], 'green' )
+            . colored( "/\n",              'red' );
 
-        foreach my $app ( @{ $root->{'/'}->{ $entries[1] }->{$entries[2]} } ) {
-            for my $name (sort keys $app) {
-                print colored("\t\t$name", "white");
-                print colored("\t". $app->{$name}->{Exec} . "\n", "magenta");
+        foreach
+            my $app ( @{ $root->{'/'}->{ $entries[1] }->{ $entries[2] } } )
+        {
+            for my $name ( sort keys $app ) {
+                print colored( "\t\t$name", "white" );
+                print colored( "\t" . $app->{$name}->{Exec} . "\n",
+                    "magenta" );
             }
         }
     }
@@ -49,5 +53,4 @@ if ( $ARGV[0] =~ '^/.+' ) {
 if ( $ARGV[0] eq 'makecache' ) {
     $cache->make_cache();
 }
-
 
